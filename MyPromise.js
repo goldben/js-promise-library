@@ -60,10 +60,6 @@ class MyPromise {
         return;
       }
 
-      if (this.#catchCbs.length === 0) {
-        throw new UncaughtPromiseError(value);
-      }
-
       this.#value = value;
       this.#state = STATE.REJECTED;
       this.#runCallbacks();
@@ -120,23 +116,15 @@ class MyPromise {
   }
 
   static resolve(value) {
-    return new Promise((resolve) => {
+    return new MyPromise((resolve) => {
       resolve(value);
     });
   }
 
   static reject(value) {
-    return new Promise((resolve, reject) => {
+    return new MyPromise((resolve, reject) => {
       reject(value);
     });
-  }
-}
-
-class UncaughtPromiseError extends Error {
-  constructor(error) {
-    super(error);
-
-    this.stack = `(in promise) ${error.stack}`;
   }
 }
 
