@@ -37,7 +37,6 @@ class MyPromise {
   };
 
   #onSuccess = (value) => {
-    queueMicrotask(() => {
       if (this.#state !== STATE.PENDING) return;
 
       if (value instanceof MyPromise) {
@@ -48,11 +47,10 @@ class MyPromise {
       this.#value = value;
       this.#state = STATE.FULFILLED;
       this.#runCallbacks();
-    });
+    
   };
 
   #onFail = (value) => {
-    queueMicrotask(() => {
       if (this.#state !== STATE.PENDING) return;
 
       if (value instanceof MyPromise) {
@@ -63,7 +61,6 @@ class MyPromise {
       this.#value = value;
       this.#state = STATE.REJECTED;
       this.#runCallbacks();
-    });
   };
 
   then(thenCb, catchCb) {
